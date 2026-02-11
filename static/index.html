@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GenerativeMedia — Ürün Linkinden Reklam Videosu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+
+  <header class="main-header">
+    <div class="logo">
+      <div class="logo-icon">GM</div>
+      <h1>GenerativeMedia</h1>
+    </div>
+    <p>Ürün linkinden poster ve reklam videosu</p>
+  </header>
+
+  <main class="app-main">
+    <!-- Adım 1: URL girişi (Creatify tarzı) -->
+    <section id="step-url" class="step step-active">
+      <h2 class="hero-title">
+        Paylaşın <span class="highlight">ürün linkinizi</span>, video ve poster oluşturalım.
+      </h2>
+      <p class="platforms-text">Desteklenen platformlar:</p>
+      <div class="platform-logos">
+        <span class="platform-pill">Trendyol</span>
+        <span class="platform-pill">Amazon</span>
+        <span class="platform-pill">Shopify</span>
+        <span class="platform-pill">Etsy</span>
+        <span class="platform-pill">eBay</span>
+        <span class="platform-pill">…</span>
+      </div>
+      <div class="url-form-wrap">
+        <input type="url" id="product-url" class="url-input" placeholder="örn. Trendyol ürün linki, Amazon linki, Shopify linki..." autocomplete="url" />
+        <a href="#" id="try-links" class="link-small">Örnek link dene</a>
+      </div>
+      <p id="url-error" class="error-msg" aria-live="polite"></p>
+      <div class="action-row">
+        <button type="button" id="btn-analyze" class="btn btn-primary">Analiz et</button>
+      </div>
+      <div class="drop-zone-wrap">
+        <p class="drop-zone-label">veya ürün fotoğrafı ile devam edin</p>
+        <div id="drop-zone" class="drop-zone" role="button" tabindex="0">
+          <input type="file" id="manual-file" accept="image/*" class="drop-zone-input" />
+          <span class="drop-zone-text" id="drop-zone-text">Ürün fotoğrafını buraya sürükleyip bırakın veya tıklayın</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Adım 2: Ürün özeti + Tema seçimi -->
+    <section id="step-theme" class="step step-hidden">
+      <div class="product-summary" id="product-summary">
+        <p class="product-summary-text" id="product-summary-text">Bu linkten aşağıdaki ürün bilgilerini çıkardık.</p>
+        <div class="product-summary-image-wrap">
+          <img id="product-summary-img" src="" alt="Ürün görseli" class="product-summary-img" />
+        </div>
+        <p class="product-summary-desc" id="product-summary-desc"></p>
+      </div>
+      <h2 class="section-title">Tema seçin</h2>
+      <p class="section-desc">Hazır temalardan birini seçin veya aşağıya özel tema yazın. LLM en uygun görseli seçip poster ve video oluşturacak.</p>
+      <div class="theme-grid" id="theme-grid">
+        <button type="button" class="theme-btn" data-theme="Kumsal / Yaz">Kumsal / Yaz</button>
+        <button type="button" class="theme-btn" data-theme="Minimalist">Minimalist</button>
+        <button type="button" class="theme-btn" data-theme="Lüks / Premium">Lüks / Premium</button>
+        <button type="button" class="theme-btn" data-theme="Doğal / Organik">Doğal / Organik</button>
+        <button type="button" class="theme-btn" data-theme="Şehir / Modern">Şehir / Modern</button>
+        <button type="button" class="theme-btn" data-theme="Banyo / Bakım">Banyo / Bakım</button>
+        <button type="button" class="theme-btn" data-theme="Mutfak / Yaşam">Mutfak / Yaşam</button>
+        <button type="button" class="theme-btn" data-theme="Bahçe / Çiçek">Bahçe / Çiçek</button>
+        <button type="button" class="theme-btn" data-theme="Stüdyo / Profesyonel">Stüdyo / Profesyonel</button>
+        <button type="button" class="theme-btn" data-theme="Farketmez">Farketmez</button>
+      </div>
+      <div class="custom-theme-wrap">
+        <label for="custom-theme">Özel tema (isteğe bağlı)</label>
+        <div class="custom-theme-row">
+          <textarea id="custom-theme" rows="2" placeholder="Örn: Kumsal ve gün batımı, minimalist beyaz zemin..."></textarea>
+          <button type="button" id="btn-create-custom" class="btn btn-primary">Oluştur</button>
+        </div>
+      </div>
+      <p class="back-link-wrap">
+        <a href="#" id="back-to-url">← Başka link analiz et</a>
+      </p>
+    </section>
+
+    <!-- Adım 3: Yükleniyor / Sonuç -->
+    <section id="step-result" class="step step-hidden">
+      <div id="result-loading" class="result-loading step-hidden">
+        <h2 class="section-title">Hazırlanıyor</h2>
+        <div class="typing">
+          <span></span><span></span><span></span>
+        </div>
+        <p>Poster ve video oluşturuluyor…</p>
+      </div>
+      <div id="result-content" class="result-content step-hidden">
+        <h2 class="section-title">Hazır</h2>
+        <p id="result-message" class="result-message"></p>
+        <div class="media-row">
+          <div id="poster-card" class="media-card" style="display: none;">
+            <span class="media-label">Poster</span>
+            <a id="poster-link" href="#" target="_blank" rel="noopener" class="media-anchor">
+              <img id="poster-img" src="" alt="Poster" />
+            </a>
+          </div>
+          <div id="video-card" class="media-card" style="display: none;">
+            <span class="media-label">Video</span>
+            <video id="result-video" src="" controls></video>
+          </div>
+        </div>
+        <button type="button" id="btn-new" class="btn btn-secondary">Yeni ürün</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+
+</html>
